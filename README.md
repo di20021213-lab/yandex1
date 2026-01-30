@@ -22,50 +22,50 @@
 
 3. Скриншот страницы, которая открылась при запросе IP-адреса балансировщика.
 
- [Uploaditerraform {
-  required_providers {
-    yandex = {
-      source = "yandex-cloud/yandex"
-    }
-  }
-}
+        [Uploaditerraform {
+       required_providers {
+       yandex = {
+        source = "yandex-cloud/yandex"
+        }
+         }
+       }
 
-provider "yandex" {
-  token = "${var.yc_token}"
-  cloud_id  = "b1ggel59310trksk1fu4"
-  folder_id = "b1g9oing6niujio3j61t"
-  zone      = "ru-central1-a"
-}
-data "template_file" "metadata" {
-  template = file("./metadata.yaml")
-}
+       provider "yandex" {
+       token = "${var.yc_token}"
+       cloud_id  = "b1ggel59310trksk1fu4"
+       folder_id = "b1g9oing6niujio3j61t"
+       zone      = "ru-central1-a"
+       }
+       data "template_file" "metadata" {
+       template = file("./metadata.yaml")
+        }
 
-resource "yandex_compute_instance" "ubuntu" {
-  count = 2
-  name = "ubuntu${count.index}"
-  platform_id = "standard-v3"
-  allow_stopping_for_update = true
-  resources {
-    core_fraction = 50
-    cores  = 2
-    memory = 4
-  }
-  boot_disk {
-    initialize_params {
-      image_id = "fd8ps4vdhf5hhuj8obp2"
-      size = 10
-      type = "network-ssd"
-    }
-  }
+       resource "yandex_compute_instance" "ubuntu" {
+       count = 2
+       name = "ubuntu${count.index}"
+       platform_id = "standard-v3"
+       allow_stopping_for_update = true
+       resources {
+       core_fraction = 50
+       cores  = 2
+       memory = 4
+       }
+       boot_disk {
+       initialize_params {
+       image_id = "fd8ps4vdhf5hhuj8obp2"
+       size = 10
+       type = "network-ssd"
+       }
+       }
 
-  network_interface {
-    subnet_id = yandex_vpc_subnet.subnet-1.id
-    nat       = true
-  }
+       network_interface {
+       subnet_id = yandex_vpc_subnet.subnet-1.id
+       nat       = true
+       }
 
-  metadata = {
-    user-data = data.template_file.metadata.rendered
-  }
+       metadata = {
+       user-data = data.template_file.metadata.rendered
+       }
 
   scheduling_policy {
     preemptible = true
