@@ -67,47 +67,46 @@
        user-data = data.template_file.metadata.rendered
        }
 
-  scheduling_policy {
-    preemptible = true
-  }
+       scheduling_policy {
+       preemptible = true
+       }
 
-}
+       }
 
-resource "yandex_vpc_network" "network-2" {
-  name = "network2"
-}
+       resource "yandex_vpc_network" "network-2" {
+       name = "network2"
+       }
 
-resource "yandex_vpc_subnet" "subnet-1" {
-  name           = "subnet1"
-  zone           = "ru-central1-a"
-  network_id     = yandex_vpc_network.network-2.id
-  v4_cidr_blocks = ["192.168.1.0/24"]
-}
+       resource "yandex_vpc_subnet" "subnet-1" {
+       name           = "subnet1"
+       zone           = "ru-central1-a"
+       network_id     = yandex_vpc_network.network-2.id
+       v4_cidr_blocks = ["192.168.1.0/24"]
+       }
 
-resource "yandex_lb_target_group" "target_group1" {
-  name      = "my-target-group"
-  dynamic "target" {
-    for_each = yandex_compute_instance.ubuntu
-    content {
-      subnet_id = yandex_vpc_subnet.subnet-1.id
-      address   = target.value.network_interface[0].ip_address
-    }
-  }
-}
+       resource "yandex_lb_target_group" "target_group1" {
+        name      = "my-target-group"
+       dynamic "target" {
+       for_each = yandex_compute_instance.ubuntu
+       content {
+        subnet_id = yandex_vpc_subnet.subnet-1.id
+        address   = target.value.network_interface[0].ip_address
+        }
+        }
+        }
 
-resource "yandex_lb_network_load_balancer" "lb-1" {
-  name = "network-load-balancer-1"
+       resource "yandex_lb_network_load_balancer" "lb-1" {
+       name = "network-load-balancer-1"
 
-  listener {
-    name = "network-load-balancer-1-listener"
-    port = 80
-    external_address_spec {
-      ip_version = "ipv4"
-    }
-  }
-
-  attached_target_group {
-    target_group_id = yandex_lb_target_group.target_group1.id
+       listener {
+       name = "network-load-balancer-1-listener"
+       port = 80
+        external_address_spec {
+       ip_version = "ipv4"
+       }
+       }
+attached_target_group 
+target_group_id = yandex_lb_target_group.target_group1.id
 
     healthcheck {
       name = "http"
@@ -116,51 +115,51 @@ resource "yandex_lb_network_load_balancer" "lb-1" {
         path = "/"
       }
     }
-  }
-}
-output "external_ip_address_ubuntu" {
-  value = "${yandex_compute_instance.ubuntu.*.network_interface.0.nat_ip_address}"
-}
+    }
+    }
+    output "external_ip_address_ubuntu" {
+    value = "${yandex_compute_instance.ubuntu.*.network_interface.0.nat_ip_address}"
+     }
 
-output "external_ip_address_lb" {
-  value = [
+     output "external_ip_address_lb" {
+     value = [
     for listener in yandex_lb_network_load_balancer.lb-1.listener :
     listener.external_address_spec
-  ]
-}ng terraform.txt…]()
+    ]
+    }ng terraform.txt…]()
+     }
 
+    Применяем аргумент count:
+    resource "yandex_compute_instance" "ubuntu" {
+    count = 2
+    name = "ubuntu${count.index}"
+    ...
+     }
 
-Применяем аргумент count:
-resource "yandex_compute_instance" "ubuntu" {
-  count = 2
-  name = "ubuntu${count.index}"
-  ...
-}
-
-Далее создаем таргет:
-resource "yandex_lb_target_group" "target_group1" {
-  name      = "my-target-group"
-  dynamic "target" {
+     Далее создаем таргет:
+    resource "yandex_lb_target_group" "target_group1" {
+     name      = "my-target-group"
+     dynamic "target" {
     for_each = yandex_compute_instance.ubuntu
     content {
       subnet_id = yandex_vpc_subnet.subnet-1.id
       address   = target.value.network_interface[0].ip_address
     }
-  }
-}
-далее
-resource "yandex_lb_network_load_balancer" "lb-1" {
-  name = "network-load-balancer-1"
+     }
+     }
+    далее
+    resource "yandex_lb_network_load_balancer" "lb-1" {
+     name = "network-load-balancer-1"
 
-  listener {
+     listener {
     name = "network-load-balancer-1-listener"
     port = 80
     external_address_spec {
       ip_version = "ipv4"
     }
-  }
+    }
 
-  attached_target_group {
+     attached_target_group {
     target_group_id = yandex_lb_target_group.target_group1.id
 
     healthcheck {
