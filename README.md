@@ -174,7 +174,7 @@ target_group_id = yandex_lb_target_group.target_group1.id
 
 <img width="631" height="297" alt="task1" src="https://github.com/user-attachments/assets/a298547f-a1ca-40f0-bdb8-f241c5319a24" />
 <img width="763" height="576" alt="image" src="https://github.com/user-attachments/assets/6d9bb867-f58d-4dd1-9489-30196ce988d8" />
-![task1-2](https://github.com/user-attachments/assets/49545d56-6982-48c1-8a21-b494234af6e7)
 
+<img width="561" height="282" alt="image" src="https://github.com/user-attachments/assets/4bd5b5fd-add8-4c3e-8766-662c8812e10b" />
 
 
