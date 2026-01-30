@@ -22,7 +22,7 @@
 
 3. Скриншот страницы, которая открылась при запросе IP-адреса балансировщика.
 
-1. [Uploaditerraform {
+ [Uploaditerraform {
   required_providers {
     yandex = {
       source = "yandex-cloud/yandex"
@@ -171,7 +171,7 @@ resource "yandex_lb_network_load_balancer" "lb-1" {
       }
     }
   }
-}
+}      
 
 <img width="631" height="297" alt="task1" src="https://github.com/user-attachments/assets/a298547f-a1ca-40f0-bdb8-f241c5319a24" />
 <img width="763" height="576" alt="image" src="https://github.com/user-attachments/assets/6d9bb867-f58d-4dd1-9489-30196ce988d8" />
